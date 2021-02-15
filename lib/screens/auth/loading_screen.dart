@@ -8,6 +8,9 @@ import 'package:personal_space/screens/main/main_screen.dart';
 class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO: THIS IS JUST FOR DEV PURPOSE
+    return LoginScreen();
+
     return StreamBuilder<User>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (_, snapshot) {

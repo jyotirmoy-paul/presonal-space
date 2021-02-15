@@ -19,6 +19,9 @@ dependencies:
   firebase_auth: ^0.20.0+1
   firebase_storage: ^7.0.0
 
+  # state management
+  provider: ^4.3.3
+
 
 dev_dependencies:
   flutter_test:
