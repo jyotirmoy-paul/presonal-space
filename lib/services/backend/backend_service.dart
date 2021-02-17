@@ -1,0 +1,3 @@
+class BackendService {
+  BackendService._();
+}
