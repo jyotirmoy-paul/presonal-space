@@ -9,6 +9,7 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StreamBuilder<User>(
         stream: FirebaseAuth.instance.authStateChanges(),
+        initialData: FirebaseAuth.instance.currentUser,
         builder: (_, snapshot) {
           log('connection state: ${snapshot.connectionState}');
           log('data: ${snapshot.data}');

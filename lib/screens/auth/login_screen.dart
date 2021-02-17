@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                       'Welcome to Personal Space',
                       style: kTextStyle30,
                     ),
-                    kDivider20,
+                    kDividerVert20,
 
                     /* user phone number input */
                     TextField(
@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                             'Your contact no. where you can receive an OTP',
                       ),
                     ),
-                    kDivider20,
+                    kDividerVert20,
 
                     /* submit / resend otp button */
                     Align(
