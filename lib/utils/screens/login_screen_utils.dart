@@ -124,7 +124,9 @@ class LoginScreenUtils {
 
             case LoginScreenState.OTP_SENT:
               return Padding(
-                padding: kContentPaddingVertical20,
+                padding: const EdgeInsets.only(
+                  top: 20.0,
+                ),
                 child: PinCodeTextField(
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -156,7 +158,7 @@ class LoginScreenUtils {
               return Padding(
                 padding: kContentPaddingVertical20,
                 child: Text(
-                  'The OTP you entered, is incorrect. Please check again, Or you are just trying to guess someone else\'s OTP, Good Luck for that.',
+                  'The OTP you entered, is incorrect. Please check again. Or are you trying to guess someone else\'s OTP, Well, good luck doing that.',
                   textAlign: TextAlign.center,
                   style: kErrorTextStyle,
                 ),
