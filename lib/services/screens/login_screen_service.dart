@@ -8,7 +8,7 @@ class LoginScreenService {
 
   static Future<String> sendOtp(
     String phoneNumber, {
-    Function onOtpSent(ConfirmationResult result),
+    void onOtpSent(ConfirmationResult result),
   }) async {
     try {
       ConfirmationResult result =
@@ -20,7 +20,7 @@ class LoginScreenService {
       log('login_screen_service : onOtpSent : $e');
 
       onOtpSent(null);
-      return ERROR;
+      return e;
     }
   }
 
@@ -35,7 +35,7 @@ class LoginScreenService {
       return SUCCESS;
     } catch (e) {
       log('login_screen_service : confirmOtp : $e');
-      return ERROR;
+      return e.toString();
     }
   }
 }

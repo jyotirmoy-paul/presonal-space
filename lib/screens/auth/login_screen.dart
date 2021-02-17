@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_space/utils/constants.dart';
-import 'package:personal_space/utils/screens/login_screen.dart';
+import 'package:personal_space/utils/screens/login_screen_utils.dart';
 import 'package:personal_space/widgets/custom_text_button.dart';
 import 'package:provider/provider.dart';
 
@@ -49,14 +49,21 @@ class LoginScreen extends StatelessWidget {
                     ),
                     kDivider20,
 
-                    /* submit otp button */
+                    /* submit / resend otp button */
                     Align(
                       alignment: Alignment.bottomRight,
-                      child: CustomTextButton(
-                        text: 'Send OTP',
-                        onPressed: () => LoginScreenUtils.onSendOtpPressed(
-                          _controller.text,
-                          context,
+                      child: Consumer<ValueNotifier<LoginScreenState>>(
+                        builder: (_, vnLoginScreenState, __) =>
+                            CustomTextButton(
+                          text: LoginScreenUtils.confirmButtonText(
+                            vnLoginScreenState.value,
+                          ),
+                          onPressed: () =>
+                              LoginScreenUtils.onConfirmButtonPress(
+                            _controller.text,
+                            context,
+                            vnLoginScreenState.value,
+                          ),
                         ),
                       ),
                     ),
@@ -66,7 +73,9 @@ class LoginScreen extends StatelessWidget {
                       duration: const Duration(
                         milliseconds: 800,
                       ),
-                      child: LoginScreenUtils.buildAnimatedSwitcherChild(),
+                      child: LoginScreenUtils.buildAnimatedSwitcherChild(
+                        context,
+                      ),
                     ),
                   ],
                 ),

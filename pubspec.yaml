@@ -22,6 +22,9 @@ dependencies:
   # state management
   provider: ^4.3.3
 
+  # UI
+  pin_code_fields: ^6.1.0
+
 
 dev_dependencies:
   flutter_test:

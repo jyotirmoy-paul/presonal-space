@@ -12,5 +12,19 @@ const kTextStyle30 = TextStyle(
   fontSize: 30.0,
 );
 
+const kErrorTextStyle = TextStyle(
+  color: Colors.red,
+  fontSize: 20.0,
+);
+
+const kSuccessTextStyle = TextStyle(
+  color: Colors.green,
+  fontSize: 20.0,
+);
+
 const ERROR = 'ERROR';
 const SUCCESS = 'SUCCESS';
+
+const kContentPaddingVertical20 = const EdgeInsets.symmetric(
+  vertical: 20.0,
+);

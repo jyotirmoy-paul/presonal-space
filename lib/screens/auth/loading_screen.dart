@@ -7,28 +7,23 @@ import 'package:personal_space/screens/main/main_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    // TODO: THIS IS JUST FOR DEV PURPOSE
-    return LoginScreen();
+  Widget build(BuildContext context) => StreamBuilder<User>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (_, snapshot) {
+          log('connection state: ${snapshot.connectionState}');
+          log('data: ${snapshot.data}');
 
-    return StreamBuilder<User>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (_, snapshot) {
-        log('connection state: ${snapshot.connectionState}');
-        log('data: ${snapshot.data}');
+          /* show waiting when connection state is waiting */
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return Center(
+              child: CircularProgressIndicator(),
+            );
 
-        /* show waiting when connection state is waiting */
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          /* if firebase user is found, open the main screen */
+          if (snapshot.hasData) return MainScreen();
 
-        /* if firebase user is found, open the main screen */
-        if (snapshot.hasData) return MainScreen();
-
-        /* if no user is found, open the login screen */
-        return LoginScreen();
-      },
-    );
-  }
+          /* if no user is found, open the login screen */
+          return LoginScreen();
+        },
+      );
 }
