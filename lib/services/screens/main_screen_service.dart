@@ -1,16 +1,22 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/local_file_model.dart';
+import 'package:personal_space/model/progress_model.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
+import 'package:personal_space/utils/constants.dart';
 
-import 'dart:developer';
+import 'package:provider/provider.dart';
 
 class MainScreenService {
   MainScreenService._();
 
-  static void onUploadButtonPress() async {
-    FilePickerResult result =
-        await FilePicker.platform.pickFiles(allowMultiple: true);
+  static void onUploadButtonPress(
+    BuildContext context,
+  ) async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+    );
+
     if (result == null) return;
 
     List<LocalFileModel> files = result.files
@@ -24,20 +30,42 @@ class MainScreenService {
         )
         .toList();
 
-    print('encryption STARTED');
+    final ProgressModel progressModel = Provider.of<ProgressModel>(
+      context,
+      listen: false,
+    );
+
+    progressModel.files = files;
+    progressModel.progressStatus = ProgressStatus.ENCRYPTING;
+
+    /* TODO: HANDLE ERROR CASES */
 
     /* apply encryption */
     await EncryptionService.applyEncryption(
       files,
       onPercentageDone: (double done) {
-        log('percentageDone: $done');
+        progressModel.percentageDone = done;
       },
     );
 
-    print('encryption DONE');
+    /* finally start uploading */
+    progressModel.progressStatus = ProgressStatus.UPLOADING;
+
+    // TODO: IMPLEMENT UPLOADING FUNCTIONALITY
+
+    /* done */
+    progressModel.progressStatus = ProgressStatus.DONE;
+
+    /* finally hide the progress widget after a certain period */
+    await Future.delayed(kWaitDuration);
+    progressModel.progressStatus = ProgressStatus.NONE;
   }
 
-  static void onSearchTextChange(BuildContext context, String text) {}
+  static void onSearchTextChange(BuildContext context, String text) =>
+      Provider.of<ValueNotifier<String>>(
+        context,
+        listen: false,
+      ).value = text;
 
   static void onProfileButtonPress() {}
 }

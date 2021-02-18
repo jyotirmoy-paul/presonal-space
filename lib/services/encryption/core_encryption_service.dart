@@ -43,7 +43,7 @@ class CoreEncryptionService {
 
       /* notify progress */
       onPercentageDone?.call(
-        currentPart.toDouble() / totalPart,
+        totalPart == 0 ? 1.0 : currentPart.toDouble() / totalPart,
       );
 
       await _delay();

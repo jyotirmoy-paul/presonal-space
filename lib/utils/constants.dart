@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const kAnimationDuration = const Duration(milliseconds: 700);
+const kWaitDuration = const Duration(milliseconds: 2100);
+
 const kLightGray = const Color(0xfff0f0f0);
 const kGray = const Color(0xffa0a0a0);
 const kDarkGray = const Color(0xff707070);
@@ -29,6 +32,22 @@ const kErrorTextStyle = TextStyle(
 const kSuccessTextStyle = TextStyle(
   color: Colors.green,
   fontSize: 20.0,
+);
+
+const kUploadingWidgetFileNameTextStyle = TextStyle(
+  color: Colors.deepPurple,
+  fontSize: 16.0,
+);
+
+const kUploadingWidgetTitleTextTextStyle = TextStyle(
+  color: Colors.deepPurple,
+  fontWeight: FontWeight.w800,
+  fontSize: 25.0,
+);
+
+const kUploadingWidgetPercentageDoneTextStyle = TextStyle(
+  color: Colors.deepPurpleAccent,
+  fontSize: 18.0,
 );
 
 const ERROR = 'ERROR';

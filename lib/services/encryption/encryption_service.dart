@@ -10,7 +10,6 @@ class EncryptionService {
     return password;
   }
 
-  /* todo: add a callback to report progress: % left */
   /* this method encrypts the fileData content and store in the encryptedData,
   * and the fileData content is set to null */
   static Future<void> applyEncryption(
