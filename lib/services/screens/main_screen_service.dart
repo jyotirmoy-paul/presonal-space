@@ -13,7 +13,6 @@ class MainScreenService {
         await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result == null) return;
 
-    /* TODO: NEED TO FILTER TOO LARGE FILES */
     List<LocalFileModel> files = result.files
         .map<LocalFileModel>(
           (f) => LocalFileModel(
@@ -25,13 +24,12 @@ class MainScreenService {
         )
         .toList();
 
-    print(files);
+    print('encryption STARTED');
 
     /* apply encryption */
-    List<LocalFileModel> encryptedFiles =
-        await EncryptionService.encrypt(files);
+    await EncryptionService.applyEncryption(files);
 
-    print('done');
+    print('encryption DONE');
   }
 
   static void onSearchTextChange(BuildContext context, String text) {}
