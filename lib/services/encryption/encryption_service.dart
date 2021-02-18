@@ -1,6 +1,7 @@
 import 'package:personal_space/model/local_file_model.dart';
 import 'package:personal_space/services/database/database.dart';
 import 'package:personal_space/services/encryption/core_encryption_service.dart';
+import 'package:encrypt/encrypt.dart' as enc;
 
 class EncryptionService {
   EncryptionService._();
@@ -8,6 +9,23 @@ class EncryptionService {
   // todo: implement this method
   static String _getModifiedMasterPassword(String password) {
     return password;
+  }
+
+  /* this method encrypts the file name or description */
+  static Future<String> getEncryptedString(
+    String string,
+    String ivString,
+  ) async {
+    String masterPassword = await DatabaseService.getMasterPassword();
+    assert(masterPassword != null);
+
+    final key = enc.Key.fromUtf8(
+      _getModifiedMasterPassword(masterPassword),
+    );
+    final iv = enc.IV.fromUtf8(ivString);
+    final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
+
+    return encrypter.encrypt(string, iv: iv).base64;
   }
 
   /* this method encrypts the fileData content and store in the encryptedData,

@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/local_file_model.dart';
 import 'package:personal_space/model/progress_model.dart';
+import 'package:personal_space/services/backend/backend_service.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
 import 'package:personal_space/utils/constants.dart';
 
@@ -48,10 +49,16 @@ class MainScreenService {
       },
     );
 
-    /* finally start uploading */
+    /* finally start uploading, thus reset the percentageDone */
     progressModel.progressStatus = ProgressStatus.UPLOADING;
+    progressModel.percentageDone = 0;
 
-    // TODO: IMPLEMENT UPLOADING FUNCTIONALITY
+    await BackendService.upload(
+      files,
+      onPercentageDone: (double done) {
+        progressModel.percentageDone = done;
+      },
+    );
 
     /* done */
     progressModel.progressStatus = ProgressStatus.DONE;

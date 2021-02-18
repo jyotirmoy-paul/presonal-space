@@ -11,9 +11,6 @@ class LoadingScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         initialData: FirebaseAuth.instance.currentUser,
         builder: (_, snapshot) {
-          log('connection state: ${snapshot.connectionState}');
-          log('data: ${snapshot.data}');
-
           /* show waiting when connection state is waiting */
           if (snapshot.connectionState == ConnectionState.waiting)
             return Center(

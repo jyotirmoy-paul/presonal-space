@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+const kUsersCollection = 'users';
+const kFilesCollection = 'files';
+const kTotalBytesUsage = 'totalBytesUsage';
+
 const kAnimationDuration = const Duration(milliseconds: 700);
 const kWaitDuration = const Duration(milliseconds: 2100);
 
