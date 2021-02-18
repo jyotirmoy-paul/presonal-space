@@ -18,14 +18,18 @@ class CoreEncryptionService {
   static Future<String> encrypt(
     Uint8List bytes,
     String keyString,
-    String ivString,
-  ) async {
+    String ivString, {
+    void onPercentageDone(double done),
+  }) async {
     final key = enc.Key.fromUtf8(keyString);
     final iv = enc.IV.fromUtf8(ivString);
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
 
     String base64String = base64Encode(bytes);
     StringBuffer encryptedStringBuffer = StringBuffer();
+
+    int totalPart = base64String.length ~/ _oneTimeProcessingLength;
+    int currentPart = 0;
 
     int i = 0;
     while (i < base64String.length) {
@@ -37,8 +41,14 @@ class CoreEncryptionService {
       encryptedStringBuffer.write(encryptedChunk.trim());
       encryptedStringBuffer.write(' ');
 
+      /* notify progress */
+      onPercentageDone?.call(
+        currentPart.toDouble() / totalPart,
+      );
+
       await _delay();
       i = end + 1;
+      currentPart += 1;
     }
 
     return encryptedStringBuffer.toString().trim();

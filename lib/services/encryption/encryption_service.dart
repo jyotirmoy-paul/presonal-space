@@ -14,14 +14,18 @@ class EncryptionService {
   /* this method encrypts the fileData content and store in the encryptedData,
   * and the fileData content is set to null */
   static Future<void> applyEncryption(
-    List<LocalFileModel> files,
-  ) async {
+    List<LocalFileModel> files, {
+    void onPercentageDone(double done),
+  }) async {
     String masterPassword = await DatabaseService.getMasterPassword();
     assert(masterPassword != null);
 
     String modifiedMasterPassword = _getModifiedMasterPassword(
       masterPassword,
     );
+
+    int totalFileCount = files.length;
+    int currentFileCount = 0;
 
     for (LocalFileModel model in files) {
       String encrypterIV = DateTime.now().microsecondsSinceEpoch.toString();
@@ -30,11 +34,19 @@ class EncryptionService {
         model.fileData,
         modifiedMasterPassword,
         encrypterIV,
+
+        /* notify progress */
+        onPercentageDone: (double subPertDone) {
+          double mainPertDone = (currentFileCount.toDouble() / totalFileCount);
+          onPercentageDone?.call(100 * mainPertDone + subPertDone);
+        },
       );
 
       model.fileData = null;
       model.encryptedData = encryptedData;
       model.encrypterIV = encrypterIV;
+
+      currentFileCount += 1;
     }
   }
 }

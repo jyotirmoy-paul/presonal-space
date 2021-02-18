@@ -1,9 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/local_file_model.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
+
+import 'dart:developer';
 
 class MainScreenService {
   MainScreenService._();
@@ -27,7 +27,12 @@ class MainScreenService {
     print('encryption STARTED');
 
     /* apply encryption */
-    await EncryptionService.applyEncryption(files);
+    await EncryptionService.applyEncryption(
+      files,
+      onPercentageDone: (double done) {
+        log('percentageDone: $done');
+      },
+    );
 
     print('encryption DONE');
   }
