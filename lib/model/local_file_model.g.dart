@@ -12,7 +12,7 @@ LocalFileModel _$LocalFileModelFromJson(Map<String, dynamic> json) {
     fileExtension: json['fileExtension'] as String,
     fileSize: json['fileSize'] as int,
     fileData: (json['fileData'] as List)?.map((e) => e as int)?.toList(),
-    encryptedIV: json['encryptedIV'] as String,
+    encrypterIV: json['encryptedIV'] as String,
     encryptedBase64Data: json['encryptedBase64Data'] as String,
   );
 }
@@ -24,5 +24,5 @@ Map<String, dynamic> _$LocalFileModelToJson(LocalFileModel instance) =>
       'fileSize': instance.fileSize,
       'fileData': instance.fileData,
       'encryptedBase64Data': instance.encryptedBase64Data,
-      'encryptedIV': instance.encryptedIV,
+      'encryptedIV': instance.encrypterIV,
     };

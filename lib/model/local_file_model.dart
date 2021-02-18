@@ -12,14 +12,14 @@ class LocalFileModel {
   List<int> fileData;
 
   String encryptedBase64Data;
-  String encryptedIV;
+  String encrypterIV;
 
   LocalFileModel({
     @required this.fileName,
     @required this.fileExtension,
     @required this.fileSize,
     @required this.fileData,
-    this.encryptedIV,
+    this.encrypterIV,
     this.encryptedBase64Data,
   });
 

@@ -31,8 +31,7 @@ class MainScreenService {
     List<LocalFileModel> encryptedFiles =
         await EncryptionService.encrypt(files);
 
-    print(encryptedFiles[0].fileData == null);
-    print(encryptedFiles[0].encryptedBase64Data == null);
+    print('done');
   }
 
   static void onSearchTextChange(BuildContext context, String text) {}
