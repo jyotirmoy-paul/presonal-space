@@ -24,10 +24,12 @@ dependencies:
 
   # UI
   pin_code_fields: ^6.1.0
+  grouped_list: ^3.7.1
 
   # utils
   file_picker: ^2.1.6
   encrypt: ^4.1.0
+  intl: ^0.16.1
 
 
 dev_dependencies:

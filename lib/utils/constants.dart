@@ -28,6 +28,12 @@ const kTextStyle25 = TextStyle(
   fontSize: 25.0,
 );
 
+const kGroupByTextStyle = TextStyle(
+  color: Colors.black,
+  fontWeight: FontWeight.w800,
+  fontSize: 18.0,
+);
+
 const kErrorTextStyle = TextStyle(
   color: Colors.red,
   fontSize: 20.0,
