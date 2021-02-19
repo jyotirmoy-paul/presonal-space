@@ -1,4 +1,3 @@
-import 'package:firebase/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
@@ -39,6 +38,9 @@ class RemoteFileItemWidgetService {
         return kIconPdf;
       case MP3:
         return kIconMp3;
+      // todo: add ogg icon
+      case OGG:
+        return kIconMp3;
       case MP4:
         return kIconMp4;
       case PNG:
@@ -49,6 +51,8 @@ class RemoteFileItemWidgetService {
         return kIconSvg;
       case ZIP:
         return kIconZip;
+      case RAR:
+        return kIconCompressed;
       case TXT:
         return kIconTxt;
       case CSV:

@@ -13,6 +13,8 @@ class RemoteFileItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double containerSize = 120;
+
     return ListenableProvider<ValueNotifier<String>>(
       create: (_) => ValueNotifier<String>(null),
       builder: (context, _) => InkWell(
@@ -28,8 +30,8 @@ class RemoteFileItemWidget extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.all(8.0),
           padding: const EdgeInsets.all(10.0),
-          width: 150.0,
-          height: 150.0,
+          width: containerSize,
+          height: containerSize,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -38,8 +40,8 @@ class RemoteFileItemWidget extends StatelessWidget {
                 RemoteFileItemWidgetService.getAsset(
                   remoteFileModel.fileExtension,
                 ),
-                height: 80.0,
-                width: 80.0,
+                height: containerSize / 2,
+                width: containerSize / 2,
               ),
               const SizedBox(
                 height: 10.0,
