@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
 
+const _kIconBase = 'assets/file_type_icons';
+const kIconFile = '$_kIconBase/file.png';
+const kIconPdf = '$_kIconBase/pdf.png';
+const kIconMp3 = '$_kIconBase/mp3.png';
+const kIconMp4 = '$_kIconBase/mp4.png';
+const kIconPng = '$_kIconBase/png.png';
+const kIconJpg = '$_kIconBase/jpg.png';
+const kIconSvg = '$_kIconBase/svg.png';
+const kIconZip = '$_kIconBase/zip.png';
+const kIconTxt = '$_kIconBase/txt.png';
+const kIconCsv = '$_kIconBase/csv.png';
+const kIconDoc = '$_kIconBase/doc.png';
+const kIconPpt = '$_kIconBase/ppt.png';
+const kIconXls = '$_kIconBase/xls.png';
+
+const FILE = 'file';
+const PDF = 'pdf';
+const MP3 = 'mp3';
+const MP4 = 'mp4';
+const PNG = 'png';
+const JPG = 'jpg';
+const SVG = 'svg';
+const ZIP = 'zip';
+const TXT = 'txt';
+const CSV = 'csv';
+const DOC = 'doc';
+const DOCX = 'docx';
+const PPT = 'ppt';
+const XLS = 'xls';
+
 const kUsersCollection = 'users';
 const kFilesCollection = 'files';
 const kTotalBytesUsage = 'totalBytesUsage';
+const kFirestoreRef = 'firestoreRef';
 
 const kAnimationDuration = const Duration(milliseconds: 700);
 const kWaitDuration = const Duration(milliseconds: 2100);
@@ -31,7 +62,7 @@ const kTextStyle25 = TextStyle(
 const kGroupByTextStyle = TextStyle(
   color: Colors.black,
   fontWeight: FontWeight.w800,
-  fontSize: 18.0,
+  fontSize: 16.0,
 );
 
 const kErrorTextStyle = TextStyle(
@@ -58,6 +89,11 @@ const kUploadingWidgetTitleTextTextStyle = TextStyle(
 const kUploadingWidgetPercentageDoneTextStyle = TextStyle(
   color: Colors.deepPurpleAccent,
   fontSize: 18.0,
+);
+
+const kRemoteFileItemWidgetFileNameTextStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 15.0,
 );
 
 const ERROR = 'ERROR';

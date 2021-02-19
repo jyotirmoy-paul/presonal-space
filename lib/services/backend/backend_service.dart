@@ -65,7 +65,9 @@ class BackendService {
       fileStorageRef: fileUrl,
       firestoreRef: localFile.encrypterIV,
       fileSize: totalBytes,
-      uploadedOn: DateTime.now(),
+      uploadedOn: DateTime.fromMicrosecondsSinceEpoch(
+        int.parse(localFile.encrypterIV),
+      ),
     );
 
     /* finally put the remote file model */
@@ -102,14 +104,16 @@ class BackendService {
     );
   }
 
-  static Stream<List<RemoteFileModel>> get() =>
-      _getCollectionReference().snapshots().map<List<RemoteFileModel>>(
-            (querySnapshots) => querySnapshots.docs
-                .map<RemoteFileModel>(
-                  (queryDocumentSnapshot) => RemoteFileModel.fromJson(
-                    queryDocumentSnapshot.data(),
-                  ),
-                )
-                .toList(),
-          );
+  static Stream<List<RemoteFileModel>> get() => _getCollectionReference()
+      .orderBy(kFirestoreRef, descending: true)
+      .snapshots()
+      .map<List<RemoteFileModel>>(
+        (querySnapshots) => querySnapshots.docs
+            .map<RemoteFileModel>(
+              (queryDocumentSnapshot) => RemoteFileModel.fromJson(
+                queryDocumentSnapshot.data(),
+              ),
+            )
+            .toList(),
+      );
 }

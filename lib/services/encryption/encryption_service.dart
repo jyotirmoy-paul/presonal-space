@@ -28,6 +28,24 @@ class EncryptionService {
     return encrypter.encrypt(string, iv: iv).base64;
   }
 
+  /* this method decrypts the file name or description */
+  static Future<String> getDecryptedString(
+    String string,
+    String ivString,
+  ) async {
+    // TODO: CHECK FOR TIME PASSED BEFORE GETTING THE MASTER PASSWORD
+    String masterPassword = await DatabaseService.getMasterPassword();
+    assert(masterPassword != null);
+
+    final key = enc.Key.fromUtf8(
+      _getModifiedMasterPassword(masterPassword),
+    );
+    final iv = enc.IV.fromUtf8(ivString);
+    final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
+
+    return encrypter.decrypt64(string, iv: iv);
+  }
+
   /* this method encrypts the fileData content and store in the encryptedData,
   * and the fileData content is set to null */
   static Future<void> applyEncryption(
