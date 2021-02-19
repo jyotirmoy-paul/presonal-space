@@ -39,7 +39,10 @@ const kTotalBytesUsage = 'totalBytesUsage';
 const kFirestoreRef = 'firestoreRef';
 
 const kAnimationDuration = const Duration(milliseconds: 700);
+const kFastAnimationDuration = const Duration(milliseconds: 300);
+
 const kWaitDuration = const Duration(milliseconds: 2100);
+const kFastWaitDuration = const Duration(milliseconds: 900);
 
 const kLightGray = const Color(0xfff0f0f0);
 const kGray = const Color(0xffa0a0a0);

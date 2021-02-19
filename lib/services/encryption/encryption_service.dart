@@ -1,5 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:personal_space/model/local_file_model.dart';
-import 'package:personal_space/services/database/database.dart';
+import 'package:personal_space/services/database/database_service.dart';
 import 'package:personal_space/services/encryption/core_encryption_service.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 
@@ -44,6 +46,24 @@ class EncryptionService {
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
 
     return encrypter.decrypt64(string, iv: iv);
+  }
+
+  static Future<Uint8List> getDecryptedMedia(
+    String encryptedData,
+    String ivString,
+  ) async {
+    String masterPassword = await DatabaseService.getMasterPassword();
+    assert(masterPassword != null);
+
+    String modifiedMasterPassword = _getModifiedMasterPassword(
+      masterPassword,
+    );
+
+    return CoreEncryptionService.decrypt(
+      encryptedData,
+      modifiedMasterPassword,
+      ivString,
+    );
   }
 
   /* this method encrypts the fileData content and store in the encryptedData,

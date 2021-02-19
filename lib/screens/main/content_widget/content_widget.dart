@@ -17,12 +17,12 @@ class ContentWidget extends StatelessWidget {
 
           if (remoteFiles == null || remoteFiles.isEmpty) return Container();
 
-          /* TODO: IMPLEMENT SEARCHING */
-
           return Consumer<ValueNotifier<String>>(
             builder: (_, vnSearchKeyword, __) => GroupedListView(
-              files:
-                  SearchService.searchFor(vnSearchKeyword.value, remoteFiles),
+              files: SearchService.searchFor(
+                vnSearchKeyword.value,
+                remoteFiles,
+              ),
             ),
           );
         },

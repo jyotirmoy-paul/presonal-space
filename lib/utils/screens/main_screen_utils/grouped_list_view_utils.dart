@@ -12,7 +12,7 @@ class GroupedListViewUtils {
 
     if (uploadedOn.isToday()) return 'Today';
     if (uploadedOn.isYesterday()) return 'Yesterday';
-    if (uploadedOn.isSameWeek()) return DateFormat('E').format(uploadedOn);
+    if (uploadedOn.isSameWeek()) return DateFormat('EEEE').format(uploadedOn);
     if (uploadedOn.isSameYear())
       return DateFormat('EEE, d MMM').format(uploadedOn);
 

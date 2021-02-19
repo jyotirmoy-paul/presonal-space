@@ -31,7 +31,6 @@ class RemoteFileItemWidget extends StatelessWidget {
           margin: const EdgeInsets.all(8.0),
           padding: const EdgeInsets.all(10.0),
           width: containerSize,
-          height: containerSize,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

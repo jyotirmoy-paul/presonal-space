@@ -1,14 +1,101 @@
+import 'package:firebase/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/remote_file_model.dart';
+import 'package:personal_space/screens/detail/detail_screen.dart';
+import 'package:personal_space/services/database/database_service.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
 import 'package:personal_space/utils/constants.dart';
+import 'package:personal_space/widgets/custom_text_button.dart';
 import 'package:provider/provider.dart';
 
 class RemoteFileItemWidgetService {
   RemoteFileItemWidgetService._();
 
+  static Dialog _buildDialog(BuildContext context) => Dialog(
+        elevation: 10.0,
+        backgroundColor: Colors.white,
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.50,
+          padding: EdgeInsets.all(20.0),
+          child: ListenableProvider<ValueNotifier<String>>(
+            // todo: remove password from here
+            create: (_) =>
+                ValueNotifier<String>('my 32 length key................'),
+            builder: (context, _) => Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                /* master password input */
+                TextField(
+                  obscureText: true,
+                  onChanged: (String s) => Provider.of<ValueNotifier<String>>(
+                    context,
+                    listen: false,
+                  ).value = s,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Master Password',
+                  ),
+                ),
+
+                /* divider */
+                const SizedBox(
+                  height: 10.0,
+                ),
+
+                /* confirm button */
+                CustomTextButton(
+                  onPressed: () async {
+                    String masterPasswordOriginal =
+                        await DatabaseService.getMasterPassword();
+                    String inputMasterPassword =
+                        Provider.of<ValueNotifier<String>>(context,
+                                listen: false)
+                            .value;
+
+                    Navigator.pop(
+                        context, masterPasswordOriginal == inputMasterPassword);
+                  },
+                  text: 'Confirm',
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
   /* open file */
-  static void openFile(BuildContext context, RemoteFileModel remoteFileModel) {}
+  static void openFile(
+      BuildContext context, RemoteFileModel remoteFileModel) async {
+    /* verify the user's authenticity */
+    bool status = await showDialog<bool>(
+      context: context,
+      builder: _buildDialog,
+    );
+
+    /* incorrect master password - message */
+    if (status == null || status == false) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Incorrect master password',
+          ),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DetailScreen(
+          remoteFileModel: remoteFileModel,
+        ),
+      ),
+    );
+  }
 
   /* this method decrypts the filename - hide / show file name*/
   static void toggleFileNameVisibility(

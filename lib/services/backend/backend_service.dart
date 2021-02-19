@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -76,6 +79,20 @@ class BackendService {
         );
 
     return totalBytes;
+  }
+
+  static Future<String> download(String url) async {
+    /* todo: implement cache functionality - to locally store the file data downloaded */
+
+    try {
+      // todo: may be need a max limit?
+      Uint8List downloadedData =
+          await FirebaseStorage.instance.refFromURL(url).getData();
+      return String.fromCharCodes(downloadedData);
+    } catch (e) {
+      log('backend_service : download : $e');
+      return null;
+    }
   }
 
   static Future<void> upload(

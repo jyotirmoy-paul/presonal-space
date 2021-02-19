@@ -1,3 +1,0 @@
-class ContentWidgetUtils {
-  ContentWidgetUtils._();
-}

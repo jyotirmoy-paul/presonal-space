@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/screens/main/content_widget/remote_file_item_widget.dart';
-import 'package:personal_space/utils/screens/grouped_list_view_utils.dart';
+import 'package:personal_space/utils/screens/main_screen_utils/grouped_list_view_utils.dart';
 
 class GroupedListView extends StatelessWidget {
   final List<RemoteFileModel> files;
