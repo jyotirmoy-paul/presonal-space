@@ -151,7 +151,7 @@ class RemoteFileItemWidgetService {
       case PPT:
         return kIconPpt;
       case XLS:
-        return XLS;
+        return kIconXls;
     }
 
     return kIconFile;

@@ -16,8 +16,6 @@ class CacheService {
   }
 
   static Future<String> get(String url) async {
-    log('returning $url from cache');
-
     hive.Box box = await _openBox();
     return box.get(
       url,
@@ -26,7 +24,6 @@ class CacheService {
   }
 
   static Future<String> put(String url, String data) async {
-    log('storing $url in cache');
     hive.Box box = await _openBox();
     await box.put(url, data);
     return data;

@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/screens/detail/audio_detail_widget.dart';
 import 'package:personal_space/screens/detail/image_detail_widget.dart';
-import 'package:personal_space/screens/detail/pdf_detail_widget.dart';
+import 'package:personal_space/screens/detail/doc_detail_widget.dart';
 import 'package:personal_space/screens/detail/text_detail_widget.dart';
 import 'package:personal_space/screens/detail/unsupported_detail_widget.dart';
 import 'package:personal_space/screens/detail/video_detail_widget.dart';
@@ -21,7 +21,7 @@ enum DetailScreenType {
   TEXT,
   VIDEO,
   AUDIO,
-  PDF,
+  DOC,
   NONE,
 }
 
@@ -34,7 +34,13 @@ class DetailScreenUtils {
         return DetailScreenType.TEXT;
 
       case 'pdf':
-        return DetailScreenType.PDF;
+        return DetailScreenType.DOC;
+      case 'doc':
+        return DetailScreenType.DOC;
+      case 'docx':
+        return DetailScreenType.DOC;
+      case 'xls':
+        return DetailScreenType.DOC;
 
       case 'mp4':
         return DetailScreenType.VIDEO;
@@ -71,8 +77,8 @@ class DetailScreenUtils {
       case DetailScreenType.AUDIO:
         return AudioDetailWidget();
 
-      case DetailScreenType.PDF:
-        return PdfDetailWidget();
+      case DetailScreenType.DOC:
+        return DocDetailWidget();
 
       case DetailScreenType.NONE:
         return UnsupportedDetailWidget();
