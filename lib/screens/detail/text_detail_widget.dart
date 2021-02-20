@@ -74,7 +74,7 @@ class TextDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) => MediaBuilder(
-        builder: (Uint8List data) => ListenableProvider<TextSettings>(
+        builder: (Uint8List data, _) => ListenableProvider<TextSettings>(
           create: (_) => TextSettings(),
           builder: (context, __) => Consumer<TextSettings>(
             builder: (_, textSettings, child) => Container(

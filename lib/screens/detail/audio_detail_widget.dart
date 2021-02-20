@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/utils/constants.dart';
 import 'package:personal_space/utils/screens/detail_screen_utils/audio_detail_widget_utils.dart';
 import 'package:personal_space/widgets/media_builder.dart';
@@ -12,8 +13,15 @@ class AudioDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         color: kDarkGray,
         child: MediaBuilder(
-          builder: (Uint8List data) => FutureBuilder<AudioPlayer>(
-            future: AudioDetailWidgetUtils.initPlayer(data),
+          builder: (
+            Uint8List data,
+            RemoteFileModel remoteFileModel,
+          ) =>
+              FutureBuilder<AudioPlayer>(
+            future: AudioDetailWidgetUtils.initPlayer(
+              data,
+              remoteFileModel.fileExtension,
+            ),
             builder: (_, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
                 return Center(

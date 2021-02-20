@@ -1,12 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/screens/detail/audio_detail_widget.dart';
 import 'package:personal_space/screens/detail/image_detail_widget.dart';
 import 'package:personal_space/screens/detail/pdf_detail_widget.dart';
 import 'package:personal_space/screens/detail/text_detail_widget.dart';
 import 'package:personal_space/screens/detail/unsupported_detail_widget.dart';
 import 'package:personal_space/screens/detail/video_detail_widget.dart';
+import 'package:personal_space/services/backend/backend_service.dart';
+import 'package:personal_space/services/encryption/encryption_service.dart';
 import 'package:personal_space/utils/constants.dart';
 import 'package:personal_space/widgets/auto_hide_widget.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +40,8 @@ class DetailScreenUtils {
         return DetailScreenType.VIDEO;
 
       case 'mp3':
+        return DetailScreenType.AUDIO;
+      case 'ogg':
         return DetailScreenType.AUDIO;
 
       case 'png':
@@ -151,4 +158,15 @@ class DetailScreenUtils {
           ),
         ),
       );
+
+  static Future<Uint8List> getMedia(RemoteFileModel model) async {
+    String encryptedData = await BackendService.download(
+      model.fileStorageRef,
+    );
+
+    return EncryptionService.getDecryptedMedia(
+      encryptedData,
+      model.firestoreRef,
+    );
+  }
 }

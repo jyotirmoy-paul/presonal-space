@@ -205,18 +205,22 @@ class AudioDetailWidgetUtils {
     );
   }
 
-  static Future<AudioPlayer> initPlayer(Uint8List data) async {
+  static Future<AudioPlayer> initPlayer(
+    Uint8List data,
+    String extension,
+  ) async {
     final AudioPlayer player = AudioPlayer();
 
-    // todo: extension may be different
     await player.setAudioSource(
       AudioSource.uri(
         Uri.dataFromBytes(
           data,
-          mimeType: 'audio/mp3',
+          mimeType: 'audio/${extension.toLowerCase()}',
         ),
       ),
     );
+
+    await player.load();
 
     return player;
   }

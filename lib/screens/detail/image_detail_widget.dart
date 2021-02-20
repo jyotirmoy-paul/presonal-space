@@ -7,7 +7,7 @@ import 'package:photo_view/photo_view.dart';
 class ImageDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MediaBuilder(
-        builder: (Uint8List data) => PhotoView(
+        builder: (Uint8List data, _) => PhotoView(
           imageProvider: MemoryImage(data),
         ),
       );

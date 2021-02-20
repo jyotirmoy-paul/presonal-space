@@ -9,7 +9,7 @@ import 'package:personal_space/widgets/media_builder.dart';
 class PdfDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MediaBuilder(
-        builder: (Uint8List data) {
+        builder: (Uint8List data, _) {
           final blob = html.Blob(
             [data],
             'application/pdf',
