@@ -3,8 +3,6 @@ import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/utils/screens/detail_screen_utils/detail_screen_utils.dart';
 import 'package:provider/provider.dart';
 
-/* TODO: ALLOW USER TO DELETE, UPDATE FILES */
-
 class DetailScreen extends StatelessWidget {
   final RemoteFileModel remoteFileModel;
 
