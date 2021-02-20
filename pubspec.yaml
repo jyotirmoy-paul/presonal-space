@@ -24,12 +24,16 @@ dependencies:
 
   # UI
   pin_code_fields: ^6.1.0
+
+  # file opening utils
   photo_view: ^0.10.3
+  video_player: ^1.0.1
 
   # utils
   file_picker: ^2.1.6
   encrypt: ^4.1.0
   intl: ^0.16.1
+  hive: ^1.4.4+1
 
 
 dev_dependencies:

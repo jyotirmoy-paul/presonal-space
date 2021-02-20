@@ -47,6 +47,7 @@ const kFastWaitDuration = const Duration(milliseconds: 900);
 const kLightGray = const Color(0xfff0f0f0);
 const kGray = const Color(0xffa0a0a0);
 const kDarkGray = const Color(0xff707070);
+const kDarkestGray = const Color(0xff303030);
 
 const kDividerVert20 = SizedBox(height: 20);
 const kDividerHor20 = SizedBox(width: 20);
