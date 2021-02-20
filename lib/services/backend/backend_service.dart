@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:personal_space/model/local_file_model.dart';
 import 'package:personal_space/model/remote_file_model.dart';
+import 'package:personal_space/services/database/cache_service.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
 import 'package:personal_space/utils/constants.dart';
 
@@ -26,7 +27,9 @@ class BackendService {
   static const FILE_SIZE = 'FILE_SIZE';
 
   static Future<Map<String, dynamic>> _uploadToStorage(
-      String base64String, String key) async {
+    String base64String,
+    String key,
+  ) async {
     UploadTask task = FirebaseStorage.instance
         .ref()
         .child(FirebaseAuth.instance.currentUser.uid)
@@ -82,13 +85,16 @@ class BackendService {
   }
 
   static Future<String> download(String url) async {
-    /* todo: implement cache functionality - to locally store the file data downloaded */
+    if (await CacheService.exists(url)) return CacheService.get(url);
 
     try {
-      // todo: may be need a max limit?
-      Uint8List downloadedData =
-          await FirebaseStorage.instance.refFromURL(url).getData();
-      return String.fromCharCodes(downloadedData);
+      Uint8List downloadedData = await FirebaseStorage.instance
+          .refFromURL(url)
+          .getData(kFirebaseDownloadMaxSize);
+      return CacheService.put(
+        url,
+        String.fromCharCodes(downloadedData),
+      );
     } catch (e) {
       log('backend_service : download : $e');
       return null;

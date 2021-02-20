@@ -109,3 +109,6 @@ const SUCCESS = 'SUCCESS';
 const kContentPaddingVertical20 = const EdgeInsets.symmetric(
   vertical: 20.0,
 );
+
+/* max download size is 100 MiB */
+const int kFirebaseDownloadMaxSize = 104857600;

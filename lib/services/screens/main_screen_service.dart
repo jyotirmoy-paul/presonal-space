@@ -18,6 +18,8 @@ class MainScreenService {
       allowMultiple: true,
     );
 
+    /* TODO: ONLY ALLOW FILES UPTO 50 MiB IN SIZE */
+
     if (result == null) return;
 
     List<LocalFileModel> files = result.files
