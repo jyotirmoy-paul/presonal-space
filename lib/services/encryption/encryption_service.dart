@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:personal_space/model/local_file_model.dart';
+import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/services/database/database_service.dart';
 import 'package:personal_space/services/encryption/core_encryption_service.dart';
 import 'package:encrypt/encrypt.dart' as enc;
@@ -30,15 +31,11 @@ class EncryptionService {
     return encrypter.encrypt(string, iv: iv).base64;
   }
 
-  /* this method decrypts the file name or description */
-  static Future<String> getDecryptedString(
+  static String getDecryptedString(
     String string,
     String ivString,
-  ) async {
-    // TODO: CHECK FOR TIME PASSED BEFORE GETTING THE MASTER PASSWORD
-    String masterPassword = await DatabaseService.getMasterPassword();
-    assert(masterPassword != null);
-
+    String masterPassword,
+  ) {
     final key = enc.Key.fromUtf8(
       _getModifiedMasterPassword(masterPassword),
     );
@@ -64,6 +61,36 @@ class EncryptionService {
       modifiedMasterPassword,
       ivString,
     );
+  }
+
+  static Future<void> _delay() => Future.delayed(
+        const Duration(microseconds: 1),
+      );
+
+  /* this method does two things:
+  * 1. decrypts the filename
+  * 2. filters out items that are in BIN */
+  static Future<List<RemoteFileModel>> preprocessRemoteFiles(
+    List<RemoteFileModel> files,
+  ) async {
+    if (files == null) return files;
+
+    String masterPassword = await DatabaseService.getMasterPassword();
+
+    for (RemoteFileModel model in files) {
+      model.decryptedFileName = getDecryptedString(
+        model.encryptedFileName,
+        model.firestoreRef,
+        masterPassword,
+      );
+      await _delay();
+    }
+
+    return files
+        .where(
+          (file) => !(file.inBin ?? false),
+        )
+        .toList();
   }
 
   /* this method encrypts the fileData content and store in the encryptedData,

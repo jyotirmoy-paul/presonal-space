@@ -167,7 +167,7 @@ class DetailScreenUtils {
 
   static Future<Uint8List> getMedia(RemoteFileModel model) async {
     String encryptedData = await BackendService.download(
-      model.fileStorageRef,
+      model.fileUrl,
     );
 
     return EncryptionService.getDecryptedMedia(

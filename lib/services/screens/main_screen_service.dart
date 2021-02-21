@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/local_file_model.dart';
 import 'package:personal_space/model/progress_model.dart';
+import 'package:personal_space/model/remote_file_model.dart';
+import 'package:personal_space/model/selected_remote_file_model.dart';
 import 'package:personal_space/services/backend/backend_service.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
 import 'package:personal_space/utils/constants.dart';
@@ -10,6 +12,18 @@ import 'package:provider/provider.dart';
 
 class MainScreenService {
   MainScreenService._();
+
+  static void deleteRemoteFilesToBin(
+    List<RemoteFileModel> files,
+    SelectedRemoteFileModel selectedRemoteFileModel,
+  ) async {
+    await BackendService.deleteMultipleToBin(files,
+        onPercentageDone: (double done) {
+      print('% permanent deleted: $done');
+    });
+
+    selectedRemoteFileModel.clearAllSelections();
+  }
 
   static void onUploadButtonPress(
     BuildContext context,

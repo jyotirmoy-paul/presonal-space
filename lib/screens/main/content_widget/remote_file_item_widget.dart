@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/remote_file_model.dart';
+import 'package:personal_space/model/selected_remote_file_model.dart';
 import 'package:personal_space/services/screens/remote_file_item_widget_service.dart';
 import 'package:personal_space/utils/constants.dart';
 import 'package:provider/provider.dart';
+
+const double containerSize = 120;
 
 class RemoteFileItemWidget extends StatelessWidget {
   final RemoteFileModel remoteFileModel;
@@ -11,26 +15,15 @@ class RemoteFileItemWidget extends StatelessWidget {
     @required this.remoteFileModel,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    double containerSize = 120;
-
-    return ListenableProvider<ValueNotifier<String>>(
-      create: (_) => ValueNotifier<String>(null),
-      builder: (context, _) => InkWell(
-        onTap: () => RemoteFileItemWidgetService.toggleFileNameVisibility(
-          context,
-          remoteFileModel.fileName,
-          remoteFileModel.firestoreRef,
-        ),
-        onDoubleTap: () => RemoteFileItemWidgetService.openFile(
+  Widget _buildMainBody(BuildContext context) => InkWell(
+        hoverColor: Colors.white,
+        highlightColor: Colors.white,
+        onTap: () => RemoteFileItemWidgetService.openFile(
           context,
           remoteFileModel,
         ),
-        child: Container(
-          margin: const EdgeInsets.all(8.0),
+        child: Padding(
           padding: const EdgeInsets.all(10.0),
-          width: containerSize,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -45,24 +38,99 @@ class RemoteFileItemWidget extends StatelessWidget {
               const SizedBox(
                 height: 10.0,
               ),
-              Consumer<ValueNotifier<String>>(
-                builder: (_, vnFileName, __) {
-                  bool showFileName = vnFileName.value != null;
-                  return Text(
-                    showFileName ? vnFileName.value : 'ENCRYPTED',
-                    textAlign: TextAlign.center,
-                    style: kRemoteFileItemWidgetFileNameTextStyle.copyWith(
-                      fontWeight:
-                          showFileName ? FontWeight.w800 : FontWeight.w400,
-                      color: showFileName ? Colors.black : Colors.redAccent,
-                    ),
-                  );
-                },
+              Text(
+                remoteFileModel.decryptedFileName ?? 'xxx',
+                textAlign: TextAlign.center,
+                style: kRemoteFileItemWidgetFileNameTextStyle,
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
+      );
+
+  Widget _buildSelectionActionWidget(
+    SelectedRemoteFileModel selectedRemoteFileModel,
+    BuildContext context,
+  ) =>
+      Consumer<ValueNotifier<bool>>(
+        builder: (_, vnHovering, child) => AnimatedOpacity(
+          duration: kFastAnimationDuration,
+          opacity: vnHovering.value ||
+                  selectedRemoteFileModel.isFileSelected(
+                    remoteFileModel,
+                  )
+              ? 1.0
+              : 0.0,
+          child: child,
+        ),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            width: containerSize,
+            height: containerSize * 0.40,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.20),
+                  Colors.black.withOpacity(0.10),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: InkWell(
+                  onTap: () => RemoteFileItemWidgetService.selectOrDeselectFile(
+                    context,
+                    remoteFileModel,
+                  ),
+                  child: Icon(
+                    Icons.check_circle,
+                    color: selectedRemoteFileModel.isFileSelected(
+                      remoteFileModel,
+                    )
+                        ? Colors.blue
+                        : Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  @override
+  Widget build(BuildContext _) => ListenableProvider<ValueNotifier<bool>>(
+        create: (_) => ValueNotifier<bool>(false),
+        builder: (context, _) => FocusableActionDetector(
+          onShowHoverHighlight: (bool onHover) =>
+              Provider.of<ValueNotifier<bool>>(
+            context,
+            listen: false,
+          ).value = onHover,
+          child: Consumer<SelectedRemoteFileModel>(
+            builder: (_, selectedRemoteFileModel, mainBodyWidget) => Container(
+              color: selectedRemoteFileModel.isFileSelected(remoteFileModel)
+                  ? Colors.blue.withOpacity(0.05)
+                  : Colors.white,
+              margin: const EdgeInsets.all(8.0),
+              width: containerSize,
+              child: Stack(
+                children: [
+                  mainBodyWidget,
+                  _buildSelectionActionWidget(
+                    selectedRemoteFileModel,
+                    context,
+                  ),
+                ],
+              ),
+            ),
+            child: _buildMainBody(context),
+          ),
+        ),
+      );
 }
