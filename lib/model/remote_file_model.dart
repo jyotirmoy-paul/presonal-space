@@ -4,19 +4,24 @@ part 'remote_file_model.g.dart';
 
 @JsonSerializable(explicitToJson: true, nullable: true)
 class RemoteFileModel {
-  String fileName;
+  @JsonKey(ignore: true)
+  String decryptedFileName;
+
+  String encryptedFileName;
   String fileExtension;
-  String fileStorageRef;
+  String fileUrl;
   String firestoreRef;
   int fileSize;
+  bool inBin;
   DateTime uploadedOn;
 
   RemoteFileModel({
-    this.fileName,
+    this.encryptedFileName,
     this.fileExtension,
-    this.fileStorageRef,
+    this.fileUrl,
     this.firestoreRef,
     this.fileSize,
+    this.inBin = false,
     this.uploadedOn,
   });
 

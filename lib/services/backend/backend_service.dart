@@ -51,10 +51,15 @@ class BackendService {
   }
 
   /* this method returns back the totalBytes stored in the cloud storage */
-  static Future<int> _upload(LocalFileModel localFile) async {
+  static Future<int> _upload(
+    LocalFileModel localFile,
+    WriteBatch writeBatch,
+  ) async {
     /* first upload then file content */
-    Map<String, dynamic> uploadedInfo =
-        await _uploadToStorage(localFile.encryptedData, localFile.encrypterIV);
+    Map<String, dynamic> uploadedInfo = await _uploadToStorage(
+      localFile.encryptedData,
+      localFile.encrypterIV,
+    );
 
     print('Uploaded File Info: $uploadedInfo');
 
@@ -63,12 +68,12 @@ class BackendService {
 
     /* create remote file model */
     final remoteFile = RemoteFileModel(
-      fileName: await EncryptionService.getEncryptedString(
+      encryptedFileName: await EncryptionService.getEncryptedString(
         localFile.fileName,
         localFile.encrypterIV,
       ),
       fileExtension: localFile.fileExtension,
-      fileStorageRef: fileUrl,
+      fileUrl: fileUrl,
       firestoreRef: localFile.encrypterIV,
       fileSize: totalBytes,
       uploadedOn: DateTime.fromMicrosecondsSinceEpoch(
@@ -76,10 +81,11 @@ class BackendService {
       ),
     );
 
-    /* finally put the remote file model */
-    await _getCollectionReference().doc(localFile.encrypterIV).set(
-          remoteFile.toJson,
-        );
+    /* put the file to be written to firestore, when committed */
+    writeBatch.set(
+      _getCollectionReference().doc(localFile.encrypterIV),
+      remoteFile.toJson,
+    );
 
     return totalBytes;
   }
@@ -101,6 +107,82 @@ class BackendService {
     }
   }
 
+  /* TODO: AT A LATER POINT, INTRODUCE THE CONCEPT OF BIN -
+      FOR KEEPING THE DELETED FILES, UNLESS THEY ARE PERMANENTLY REMOVED */
+
+  /* this method deletes multiple remote files to BIN */
+  static Future<void> deleteMultipleToBin(
+    List<RemoteFileModel> remoteFiles, {
+    void onPercentageDone(double done),
+  }) async {
+    /* batch update all of the files to have the property "inBin" to be true */
+    WriteBatch writeBatch = FirebaseFirestore.instance.batch();
+
+    int totalCount = remoteFiles.length;
+    int currentCount = 0;
+
+    for (RemoteFileModel remoteFileModel in remoteFiles) {
+      remoteFileModel.inBin = true;
+      writeBatch.update(
+        _getCollectionReference().doc(remoteFileModel.firestoreRef),
+        remoteFileModel.toJson,
+      );
+
+      onPercentageDone?.call(currentCount / totalCount);
+
+      currentCount += 1;
+    }
+
+    return writeBatch.commit();
+  }
+
+  /* this method deletes multiple remote files permanently */
+  /* todo: this method can only be invoked from the bin_view */
+  static Future<void> deleteMultiplePermanent(
+    List<RemoteFileModel> remoteFiles, {
+    void onPercentageDone(double done),
+  }) async {
+    int totalCount = remoteFiles.length;
+    int currentCount = 0;
+
+    int totalBytesDeleted = 0;
+
+    WriteBatch writeBatch = FirebaseFirestore.instance.batch();
+
+    for (RemoteFileModel remoteFileModel in remoteFiles) {
+      /* delete the storage file */
+      await FirebaseStorage.instance
+          .refFromURL(remoteFileModel.fileUrl)
+          .delete();
+
+      totalBytesDeleted += remoteFileModel.fileSize;
+
+      /* collect for deletion */
+      writeBatch.delete(
+        _getCollectionReference().doc(remoteFileModel.firestoreRef),
+      );
+
+      onPercentageDone?.call(currentCount / totalCount);
+
+      currentCount += 1;
+    }
+
+    /* finally delete the collection reference */
+    await writeBatch.commit();
+
+    /* finally update the total storage used under that user's ID */
+    return _getDocumentReference().set(
+      {
+        kTotalBytesUsage: FieldValue.increment(
+          -totalBytesDeleted,
+        ),
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+  }
+
   static Future<void> upload(
     List<LocalFileModel> localFiles, {
     void onPercentageDone(double done),
@@ -110,11 +192,17 @@ class BackendService {
 
     int totalBytesStored = 0;
 
+    WriteBatch writeBatch = FirebaseFirestore.instance.batch();
+
     for (LocalFileModel localFile in localFiles) {
-      totalBytesStored += await _upload(localFile);
+      totalBytesStored += await _upload(localFile, writeBatch);
       onPercentageDone?.call(currentCount.toDouble() * 100 / totalCount);
       currentCount += 1;
     }
+
+    /* finally commit the changes to firestore -
+    actual uploading to Firestore is done here */
+    await writeBatch.commit();
 
     /* finally update the total storage used under that user's ID */
     return _getDocumentReference().set(

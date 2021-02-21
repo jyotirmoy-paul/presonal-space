@@ -80,6 +80,48 @@ class MainScreenUtils {
         ),
       );
 
+  /* show actions for the selected files */
+  static Widget _buildActionWidgetForSelectedFiles(
+    SelectedRemoteFileModel selectedFiles,
+  ) =>
+      Row(
+        children: [
+          /* clear All selections button */
+          IconButton(
+            icon: Icon(
+              Icons.clear_rounded,
+              color: Colors.black,
+            ),
+            onPressed: selectedFiles.clearAllSelections,
+          ),
+
+          /* no of files selected indicator */
+          kDividerHor20,
+          Text(
+            '${selectedFiles.selectionCount} Selected',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+            ),
+          ),
+
+          /* spacer */
+          Spacer(),
+
+          /* delete button */
+          IconButton(
+            icon: Icon(
+              Icons.delete_rounded,
+              color: Colors.black,
+            ),
+            onPressed: () => MainScreenService.deleteRemoteFilesToBin(
+              selectedFiles.allFiles,
+              selectedFiles,
+            ),
+          ),
+        ],
+      );
+
   static Widget _buildProfileButton() => IconButton(
         icon: Icon(
           Icons.people,
@@ -134,11 +176,25 @@ class MainScreenUtils {
         kDividerHor20,
       ];
 
-  static AppBar buildAppBar() => AppBar(
-        backgroundColor: Colors.white,
-        elevation: 5.0,
-        leading: _buildLogoWidget(),
-        title: _buildSearchBar(),
-        actions: _buildOtherActions(),
+  static Widget _buildTitle(SelectedRemoteFileModel selectedRemoteFileModel) =>
+      selectedRemoteFileModel.isThereAnySelection
+          ? _buildActionWidgetForSelectedFiles(
+              selectedRemoteFileModel,
+            )
+          : _buildSearchBar();
+
+  static Widget buildAppBar() => PreferredSize(
+        preferredSize: Size.fromHeight(56.0),
+        child: Consumer<SelectedRemoteFileModel>(
+          builder: (_, selectedRemoteFileModel, __) => AppBar(
+            backgroundColor: Colors.white,
+            elevation: 5.0,
+            leading: _buildLogoWidget(),
+            title: _buildTitle(selectedRemoteFileModel),
+            actions: selectedRemoteFileModel.isThereAnySelection
+                ? []
+                : _buildOtherActions(),
+          ),
+        ),
       );
 }

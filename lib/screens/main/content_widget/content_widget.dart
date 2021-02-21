@@ -16,7 +16,7 @@ class ContentWidget extends StatelessWidget {
 
           /* this future builder returns the list of remote files after decrypting every file name */
           return FutureBuilder<List<RemoteFileModel>>(
-            future: EncryptionService.applyFileNameDecryption(snapshot.data),
+            future: EncryptionService.preprocessRemoteFiles(snapshot.data),
             builder: (_, decryptedFileNameSnapshot) {
               if (decryptedFileNameSnapshot.connectionState ==
                   ConnectionState.waiting)

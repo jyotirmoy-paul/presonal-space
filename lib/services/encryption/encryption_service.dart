@@ -67,7 +67,10 @@ class EncryptionService {
         const Duration(microseconds: 1),
       );
 
-  static Future<List<RemoteFileModel>> applyFileNameDecryption(
+  /* this method does two things:
+  * 1. decrypts the filename
+  * 2. filters out items that are in BIN */
+  static Future<List<RemoteFileModel>> preprocessRemoteFiles(
     List<RemoteFileModel> files,
   ) async {
     if (files == null) return files;
@@ -75,15 +78,19 @@ class EncryptionService {
     String masterPassword = await DatabaseService.getMasterPassword();
 
     for (RemoteFileModel model in files) {
-      model.fileName = getDecryptedString(
-        model.fileName,
+      model.decryptedFileName = getDecryptedString(
+        model.encryptedFileName,
         model.firestoreRef,
         masterPassword,
       );
       await _delay();
     }
 
-    return files;
+    return files
+        .where(
+          (file) => !(file.inBin ?? false),
+        )
+        .toList();
   }
 
   /* this method encrypts the fileData content and store in the encryptedData,

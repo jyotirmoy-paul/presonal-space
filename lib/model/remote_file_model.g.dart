@@ -8,11 +8,12 @@ part of 'remote_file_model.dart';
 
 RemoteFileModel _$RemoteFileModelFromJson(Map<String, dynamic> json) {
   return RemoteFileModel(
-    fileName: json['fileName'] as String,
+    encryptedFileName: json['encryptedFileName'] as String,
     fileExtension: json['fileExtension'] as String,
-    fileStorageRef: json['fileStorageRef'] as String,
+    fileUrl: json['fileUrl'] as String,
     firestoreRef: json['firestoreRef'] as String,
     fileSize: json['fileSize'] as int,
+    inBin: json['inBin'] as bool,
     uploadedOn: json['uploadedOn'] == null
         ? null
         : DateTime.parse(json['uploadedOn'] as String),
@@ -21,10 +22,11 @@ RemoteFileModel _$RemoteFileModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$RemoteFileModelToJson(RemoteFileModel instance) =>
     <String, dynamic>{
-      'fileName': instance.fileName,
+      'encryptedFileName': instance.encryptedFileName,
       'fileExtension': instance.fileExtension,
-      'fileStorageRef': instance.fileStorageRef,
+      'fileUrl': instance.fileUrl,
       'firestoreRef': instance.firestoreRef,
       'fileSize': instance.fileSize,
+      'inBin': instance.inBin,
       'uploadedOn': instance.uploadedOn?.toIso8601String(),
     };

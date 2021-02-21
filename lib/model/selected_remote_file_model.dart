@@ -2,39 +2,37 @@ import 'package:flutter/cupertino.dart';
 import 'package:personal_space/model/remote_file_model.dart';
 
 class SelectedRemoteFileModel extends ChangeNotifier {
-  List<RemoteFileModel> _remoteFileModels;
-  Map<String, bool> _remoteFileModelExistenceMap;
+  Map<String, RemoteFileModel> _remoteFileModelExistenceMap;
 
   SelectedRemoteFileModel() {
-    _remoteFileModels = [];
     _remoteFileModelExistenceMap = Map();
   }
 
   void addAllFiles(List<RemoteFileModel> files) {
-    for (RemoteFileModel model in files) {
-      _remoteFileModels.add(model);
-      _remoteFileModelExistenceMap[model.firestoreRef] = true;
-    }
+    for (RemoteFileModel model in files)
+      _remoteFileModelExistenceMap[model.firestoreRef] = model;
+
     notifyListeners();
   }
 
   void removeAllFiles(List<RemoteFileModel> files) {
-    for (RemoteFileModel model in files) {
-      _remoteFileModels.remove(model);
+    for (RemoteFileModel model in files)
       _remoteFileModelExistenceMap.remove(model.firestoreRef);
-    }
     notifyListeners();
   }
 
   void addFile(RemoteFileModel model) {
-    _remoteFileModels.add(model);
-    _remoteFileModelExistenceMap[model.firestoreRef] = true;
+    _remoteFileModelExistenceMap[model.firestoreRef] = model;
     notifyListeners();
   }
 
   void removeFile(RemoteFileModel model) {
-    _remoteFileModels.remove(model);
     _remoteFileModelExistenceMap.remove(model.firestoreRef);
+    notifyListeners();
+  }
+
+  void clearAllSelections() {
+    _remoteFileModelExistenceMap.clear();
     notifyListeners();
   }
 
@@ -51,5 +49,15 @@ class SelectedRemoteFileModel extends ChangeNotifier {
     return true;
   }
 
-  List<RemoteFileModel> get remoteFileModel => _remoteFileModels;
+  bool get isThereAnySelection => _remoteFileModelExistenceMap.length != 0;
+
+  int get selectionCount => _remoteFileModelExistenceMap.length;
+
+  List<RemoteFileModel> get allFiles {
+    List<RemoteFileModel> remoteFileModels = [];
+    _remoteFileModelExistenceMap.forEach(
+      (_, model) => remoteFileModels.add(model),
+    );
+    return remoteFileModels;
+  }
 }

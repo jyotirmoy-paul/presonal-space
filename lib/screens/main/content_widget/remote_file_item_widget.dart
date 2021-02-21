@@ -49,7 +49,7 @@ class RemoteFileItemWidget extends StatelessWidget {
                 height: 10.0,
               ),
               Text(
-                remoteFileModel.fileName,
+                remoteFileModel.decryptedFileName ?? 'xxx',
                 textAlign: TextAlign.center,
                 style: kRemoteFileItemWidgetFileNameTextStyle,
               ),
