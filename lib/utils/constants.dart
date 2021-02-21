@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
 
+const kSettings = 'Settings';
+const kBin = 'Bin';
+const kLogout = 'Logout';
+
+const kMainScreenMenuItemChoices = <String>[
+  kSettings,
+  kBin,
+  kLogout,
+];
+
+const kMenuPopupOffset = const Offset(10.0, 65.0);
+
 const _kIconBase = 'assets/file_type_icons';
 const kIconFile = '$_kIconBase/file.png';
 const kIconPdf = '$_kIconBase/pdf.png';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/progress_model.dart';
 import 'package:personal_space/model/selected_remote_file_model.dart';
+import 'package:personal_space/screens/main/main_screen.dart';
 import 'package:personal_space/services/screens/main_screen_service.dart';
 import 'package:personal_space/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,13 @@ class MainScreenUtils {
 
   /* following contains all the util methods used in the main_screen */
   static List<SingleChildWidget> getProviders() => [
+        /* allow shifting between main and bin files - default is MAIN_FILES*/
+        ListenableProvider<ValueNotifier<MainScreenFileType>>(
+          create: (_) => ValueNotifier<MainScreenFileType>(
+            MainScreenFileType.MAIN_FILES,
+          ),
+        ),
+
         /* allow selection of remote files for mass deletion / mass marking */
         ListenableProvider<SelectedRemoteFileModel>(
           create: (_) => SelectedRemoteFileModel(),
@@ -122,13 +130,27 @@ class MainScreenUtils {
         ],
       );
 
-  static Widget _buildProfileButton() => IconButton(
-        icon: Icon(
-          Icons.people,
-          size: 28.0,
-          color: kDarkGray,
+  static Widget _buildMenu() => Builder(
+        builder: (context) => PopupMenuButton<String>(
+          offset: kMenuPopupOffset,
+          onSelected: (String choice) => MainScreenService.onMenuChoiceTap(
+            choice,
+            context,
+          ),
+          icon: Icon(
+            Icons.more_vert_rounded,
+            size: 28.0,
+            color: kDarkGray,
+          ),
+          itemBuilder: (_) => kMainScreenMenuItemChoices
+              .map<PopupMenuItem<String>>(
+                (c) => PopupMenuItem<String>(
+                  value: c,
+                  child: Text(c),
+                ),
+              )
+              .toList(),
         ),
-        onPressed: MainScreenService.onProfileButtonPress,
       );
 
   static Widget _buildUploadButton() => Builder(
@@ -172,7 +194,7 @@ class MainScreenUtils {
   static List<Widget> _buildOtherActions() => <Widget>[
         _buildUploadButton(),
         kDividerHor20,
-        _buildProfileButton(),
+        _buildMenu(),
         kDividerHor20,
       ];
 

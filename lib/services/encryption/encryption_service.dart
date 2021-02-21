@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:personal_space/model/local_file_model.dart';
 import 'package:personal_space/model/remote_file_model.dart';
+import 'package:personal_space/screens/main/main_screen.dart';
 import 'package:personal_space/services/database/database_service.dart';
 import 'package:personal_space/services/encryption/core_encryption_service.dart';
 import 'package:encrypt/encrypt.dart' as enc;
@@ -72,6 +73,7 @@ class EncryptionService {
   * 2. filters out items that are in BIN */
   static Future<List<RemoteFileModel>> preprocessRemoteFiles(
     List<RemoteFileModel> files,
+    MainScreenFileType mainScreenFileType,
   ) async {
     if (files == null) return files;
 
@@ -86,11 +88,13 @@ class EncryptionService {
       await _delay();
     }
 
-    return files
-        .where(
-          (file) => !(file.inBin ?? false),
-        )
-        .toList();
+    /* if screen type is MAIN_FILES then return the files that are not in BIN,
+    else return only the files that are in BIN */
+
+    if (mainScreenFileType == MainScreenFileType.MAIN_FILES)
+      return files.where((file) => !(file.inBin ?? false)).toList();
+
+    return files.where((file) => file.inBin ?? false).toList();
   }
 
   /* this method encrypts the fileData content and store in the encryptedData,

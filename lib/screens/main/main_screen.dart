@@ -4,6 +4,11 @@ import 'package:personal_space/screens/main/progress_widget.dart';
 import 'package:personal_space/utils/screens/main_screen_utils/main_screen_utils.dart';
 import 'package:provider/provider.dart';
 
+enum MainScreenFileType {
+  BIN_FILES,
+  MAIN_FILES,
+}
+
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext _) => MultiProvider(

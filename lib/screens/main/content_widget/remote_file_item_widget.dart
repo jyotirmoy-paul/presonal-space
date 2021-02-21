@@ -27,6 +27,7 @@ class RemoteFileItemWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(
                 RemoteFileItemWidgetService.getAsset(

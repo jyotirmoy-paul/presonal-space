@@ -1,9 +1,11 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/local_file_model.dart';
 import 'package:personal_space/model/progress_model.dart';
 import 'package:personal_space/model/remote_file_model.dart';
 import 'package:personal_space/model/selected_remote_file_model.dart';
+import 'package:personal_space/screens/main/main_screen.dart';
 import 'package:personal_space/services/backend/backend_service.dart';
 import 'package:personal_space/services/encryption/encryption_service.dart';
 import 'package:personal_space/utils/constants.dart';
@@ -12,6 +14,30 @@ import 'package:provider/provider.dart';
 
 class MainScreenService {
   MainScreenService._();
+
+  static void _setMainScreenFileTypeToBinFiles(BuildContext context) =>
+      Provider.of<ValueNotifier<MainScreenFileType>>(
+        context,
+        listen: false,
+      ).value = MainScreenFileType.BIN_FILES;
+
+  static Future<void> onMenuChoiceTap(
+    String choice,
+    BuildContext context,
+  ) async {
+    switch (choice) {
+      case kSettings:
+        break;
+
+      case kBin:
+        return _setMainScreenFileTypeToBinFiles(
+          context,
+        );
+
+      case kLogout:
+        return FirebaseAuth.instance.signOut();
+    }
+  }
 
   static void deleteRemoteFilesToBin(
     List<RemoteFileModel> files,
