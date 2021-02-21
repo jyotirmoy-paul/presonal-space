@@ -12,6 +12,9 @@ class GroupedListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /* TODO: BUILD EMPTY FILES WIDGET */
+    if (files == null || files.isEmpty) return Container();
+
     Map<String, List<RemoteFileModel>> groupedFiles = Map();
 
     /* group files as per belongsToGroup value */

@@ -97,25 +97,26 @@ class RemoteFileItemWidgetService {
     );
   }
 
+  /* WE DON'T NEED THIS FUNCTIONALITY */
   /* this method decrypts the filename - hide / show file name*/
-  static void toggleFileNameVisibility(
-    BuildContext context,
-    String fn,
-    String firestoreRef,
-  ) async {
-    ValueNotifier<String> vnFileName = Provider.of(
-      context,
-      listen: false,
-    );
-
-    if (vnFileName.value != null) return vnFileName.value = null;
-
-    String fileName = await EncryptionService.getDecryptedString(
-      fn,
-      firestoreRef,
-    );
-    vnFileName.value = fileName;
-  }
+  // static void toggleFileNameVisibility(
+  //   BuildContext context,
+  //   String fn,
+  //   String firestoreRef,
+  // ) async {
+  //   ValueNotifier<String> vnFileName = Provider.of(
+  //     context,
+  //     listen: false,
+  //   );
+  //
+  //   if (vnFileName.value != null) return vnFileName.value = null;
+  //
+  //   String fileName = await EncryptionService.getDecryptedString(
+  //     fn,
+  //     firestoreRef,
+  //   );
+  //   vnFileName.value = fileName;
+  // }
 
   static String getAsset(String extension) {
     switch (extension.toLowerCase()) {
