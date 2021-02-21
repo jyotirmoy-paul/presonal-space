@@ -54,7 +54,7 @@ class SearchService {
   }
 
   static bool _dateMatch(RemoteFileModel model, String keyword) =>
-      DateFormat('EEEE MMMM')
+      DateFormat('E MMMM')
           .format(model.uploadedOn)
           .toLowerCase()
           .contains(keyword.toLowerCase());

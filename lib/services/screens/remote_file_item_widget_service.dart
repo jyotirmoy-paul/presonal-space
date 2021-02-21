@@ -1,9 +1,8 @@
-import 'package:firebase/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/remote_file_model.dart';
+import 'package:personal_space/model/selected_remote_file_model.dart';
 import 'package:personal_space/screens/detail/detail_screen.dart';
 import 'package:personal_space/services/database/database_service.dart';
-import 'package:personal_space/services/encryption/encryption_service.dart';
 import 'package:personal_space/utils/constants.dart';
 import 'package:personal_space/widgets/custom_text_button.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +55,9 @@ class RemoteFileItemWidgetService {
                             .value;
 
                     Navigator.pop(
-                        context, masterPasswordOriginal == inputMasterPassword);
+                      context,
+                      masterPasswordOriginal == inputMasterPassword,
+                    );
                   },
                   text: 'Confirm',
                 ),
@@ -66,9 +67,28 @@ class RemoteFileItemWidgetService {
         ),
       );
 
+  /* select file */
+  static void selectOrDeselectFile(
+    BuildContext context,
+    RemoteFileModel model,
+  ) {
+    SelectedRemoteFileModel selectedRemoteFileModel =
+        Provider.of<SelectedRemoteFileModel>(
+      context,
+      listen: false,
+    );
+
+    if (selectedRemoteFileModel.isFileSelected(model))
+      selectedRemoteFileModel.removeFile(model);
+    else
+      selectedRemoteFileModel.addFile(model);
+  }
+
   /* open file */
   static void openFile(
-      BuildContext context, RemoteFileModel remoteFileModel) async {
+    BuildContext context,
+    RemoteFileModel remoteFileModel,
+  ) async {
     /* verify the user's authenticity */
     bool status = await showDialog<bool>(
       context: context,
@@ -96,27 +116,6 @@ class RemoteFileItemWidgetService {
       ),
     );
   }
-
-  /* WE DON'T NEED THIS FUNCTIONALITY */
-  /* this method decrypts the filename - hide / show file name*/
-  // static void toggleFileNameVisibility(
-  //   BuildContext context,
-  //   String fn,
-  //   String firestoreRef,
-  // ) async {
-  //   ValueNotifier<String> vnFileName = Provider.of(
-  //     context,
-  //     listen: false,
-  //   );
-  //
-  //   if (vnFileName.value != null) return vnFileName.value = null;
-  //
-  //   String fileName = await EncryptionService.getDecryptedString(
-  //     fn,
-  //     firestoreRef,
-  //   );
-  //   vnFileName.value = fileName;
-  // }
 
   static String getAsset(String extension) {
     switch (extension.toLowerCase()) {

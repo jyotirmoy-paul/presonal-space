@@ -9,6 +9,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext _) => MultiProvider(
         providers: MainScreenUtils.getProviders(),
         builder: (context, _) => Scaffold(
+          backgroundColor: Colors.white,
           appBar: MainScreenUtils.buildAppBar(),
           body: Stack(
             children: [

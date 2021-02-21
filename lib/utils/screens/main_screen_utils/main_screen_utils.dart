@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_space/model/progress_model.dart';
-import 'package:personal_space/screens/main/progress_widget.dart';
+import 'package:personal_space/model/selected_remote_file_model.dart';
 import 'package:personal_space/services/screens/main_screen_service.dart';
 import 'package:personal_space/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +11,11 @@ class MainScreenUtils {
 
   /* following contains all the util methods used in the main_screen */
   static List<SingleChildWidget> getProviders() => [
+        /* allow selection of remote files for mass deletion / mass marking */
+        ListenableProvider<SelectedRemoteFileModel>(
+          create: (_) => SelectedRemoteFileModel(),
+        ),
+
         /* to facilitate search functionality */
         ListenableProvider<ValueNotifier<String>>(
           create: (_) => ValueNotifier<String>(''),
@@ -18,7 +23,7 @@ class MainScreenUtils {
 
         /* for the uploading progress model build for the progress widget */
         ListenableProvider<ProgressModel>(
-          create: (_) => ProgressModel(percentageDone: 35.0),
+          create: (_) => ProgressModel(percentageDone: 0.0),
         ),
       ];
 

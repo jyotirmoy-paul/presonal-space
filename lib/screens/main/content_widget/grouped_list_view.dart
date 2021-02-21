@@ -47,6 +47,7 @@ class GroupedListView extends StatelessWidget {
             children: [
               GroupedListViewUtils.groupSeparatorBuilder(
                 groupName,
+                groupedFiles,
               ),
               Wrap(
                 children: groupFiles
